@@ -63,6 +63,17 @@ form.addEventListener("submit", async (event) => {
 		]);
 	}
 	const frame = scramjet.createFrame();
+
+	frame.hooks.fetch.intercept.tap((context, props) => {
+		if (!window.NexusAdBlock?.matches(context.parsed.url.href)) return;
+
+		props.response = {
+			body: "",
+			status: 204,
+			statusText: "No Content",
+			headers: $scramjet.ScramjetHeaders.fromRawHeaders([]),
+		};
+	});
 	frame.frame.id = "sj-frame";
 	document.body.appendChild(frame.frame);
 	frame.go(url);
