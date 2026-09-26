@@ -71,7 +71,7 @@ form.addEventListener("submit", async (event) => {
 			body: "",
 			status: 204,
 			statusText: "No Content",
-			headers: $scramjet.ScramjetHeaders.fromRawHeaders([]),
+			headers: new Headers(),
 		};
 	});
 	frame.frame.id = "sj-frame";
