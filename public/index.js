@@ -1,4 +1,9 @@
 "use strict";
+
+const theme = new URLSearchParams(window.location.search).get("theme");
+if (theme === "nexus" || theme === "midnight" || theme === "light") {
+	document.documentElement.setAttribute("data-theme", theme);
+}
 /**
  * @type {HTMLFormElement}
  */
