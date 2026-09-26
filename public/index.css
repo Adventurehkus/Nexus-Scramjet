@@ -14,8 +14,8 @@
 
 :root[data-theme="light"] {
 --scrollbar-track: #eaeef2;
---scrollbar-thumb: #b6bec8;
---scrollbar-thumb-hover: #8c959f;
+--scrollbar-thumb: #8c959f;
+--scrollbar-thumb-hover: #6e7781;
 }
 
 body {
