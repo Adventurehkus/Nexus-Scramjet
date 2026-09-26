@@ -64,6 +64,21 @@ form.addEventListener("submit", async (event) => {
 	}
 	const frame = scramjet.createFrame();
 	frame.frame.id = "sj-frame";
+
+	frame.hooks.fetch.request.tap((context, props) => {
+		const requestUrl = props.url?.toString?.() ?? context.parsed?.url?.toString?.();
+
+		if (requestUrl && window.NexusAdBlock?.matches(requestUrl)) {
+			props.earlyResponse = new Response("", {
+				status: 204,
+				statusText: "No Content",
+				headers: {
+					"Cache-Control": "no-store",
+				},
+			});
+		}
+	});
+
 	document.body.appendChild(frame.frame);
 	frame.go(url);
 });
