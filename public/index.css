@@ -1,15 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap");
 
 :root {
---scrollbar-track: #111;
+--scrollbar-track: #161b22;
 --scrollbar-thumb: #000;
 --scrollbar-thumb-hover: #111;
 }
 
 :root[data-theme="midnight"] {
 --scrollbar-track: #101525;
---scrollbar-thumb: #05070d;
---scrollbar-thumb-hover: #1a2238;
+--scrollbar-thumb: #252d46;
+--scrollbar-thumb-hover: #35405f;
 }
 
 :root[data-theme="light"] {
