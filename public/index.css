@@ -7,6 +7,26 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
+	scrollbar-color: #000 #111;
+	scrollbar-width: auto;
+}
+
+body::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+body::-webkit-scrollbar-track {
+	background: #111;
+}
+
+body::-webkit-scrollbar-thumb {
+	background: #000;
+	border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+	background: #111;
 }
 
 .flex-center {
