@@ -1,5 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap");
 
+:root {
+--scrollbar-track: #111;
+--scrollbar-thumb: #000;
+--scrollbar-thumb-hover: #111;
+}
+
+:root[data-theme="midnight"] {
+--scrollbar-track: #101525;
+--scrollbar-thumb: #05070d;
+--scrollbar-thumb-hover: #1a2238;
+}
+
+:root[data-theme="light"] {
+--scrollbar-track: #eaeef2;
+--scrollbar-thumb: #b6bec8;
+--scrollbar-thumb-hover: #8c959f;
+}
+
 body {
 font-family: "Roboto", Arial, Helvetica, sans-serif;
 margin: 0;
@@ -7,7 +25,7 @@ background: #111;
 display: flex;
 flex-direction: column;
 min-height: 100vh;
-scrollbar-color: #000 #111;
+scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 scrollbar-width: auto;
 }
 
@@ -17,16 +35,16 @@ height: 10px;
 }
 
 body::-webkit-scrollbar-track {
-background: #111;
+background: var(--scrollbar-track);
 }
 
 body::-webkit-scrollbar-thumb {
-background: #000;
+background: var(--scrollbar-thumb);
 border-radius: 5px;
 }
 
 body::-webkit-scrollbar-thumb:hover {
-background: #111;
+background: var(--scrollbar-thumb-hover);
 }
 
 .flex-center {
@@ -178,9 +196,9 @@ content: "hide license";
 display: block;
 }
 
-/* Black scrollbars */
+/* Theme-aware scrollbars */
 html {
-scrollbar-color: #000 #111;
+scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 scrollbar-width: auto;
 }
 
@@ -190,14 +208,14 @@ height: 10px;
 }
 
 html::-webkit-scrollbar-track {
-background: #111;
+background: var(--scrollbar-track);
 }
 
 html::-webkit-scrollbar-thumb {
-background: #000;
+background: var(--scrollbar-thumb);
 border-radius: 5px;
 }
 
 html::-webkit-scrollbar-thumb:hover {
-background: #111;
+background: var(--scrollbar-thumb-hover);
 }
