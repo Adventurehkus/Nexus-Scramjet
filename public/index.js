@@ -1,6 +1,7 @@
 "use strict";
 
-const theme = new URLSearchParams(window.location.search).get("theme");
+const params = new URLSearchParams(window.location.search);
+const theme = params.get("theme");
 if (theme === "nexus" || theme === "midnight" || theme === "light") {
 	document.documentElement.setAttribute("data-theme", theme);
 }
@@ -39,9 +40,7 @@ scramjet.init();
 
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
 
-form.addEventListener("submit", async (event) => {
-	event.preventDefault();
-
+async function launch(url) {
 	try {
 		await registerSW();
 	} catch (err) {
@@ -49,8 +48,6 @@ form.addEventListener("submit", async (event) => {
 		errorCode.textContent = err.toString();
 		throw err;
 	}
-
-	const url = search(address.value, searchEngine.value);
 
 	let wispUrl =
 		(location.protocol === "https:" ? "wss" : "ws") +
@@ -62,8 +59,34 @@ form.addEventListener("submit", async (event) => {
 			{ websocket: wispUrl },
 		]);
 	}
+
 	const frame = scramjet.createFrame();
 	frame.frame.id = "sj-frame";
 	document.body.appendChild(frame.frame);
 	frame.go(url);
+}
+
+form.addEventListener("submit", async (event) => {
+	event.preventDefault();
+
+	const url = search(address.value, searchEngine.value);
+	await launch(url);
 });
+
+// Support direct-launch URLs such as:
+// https://nexus-scramjet.onrender.com/?url=https%3A%2F%2Fopen.spotify.com%2F
+const directUrl = params.get("url");
+if (directUrl) {
+	try {
+		const parsedUrl = new URL(directUrl);
+		if (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") {
+			launch(parsedUrl.toString());
+		} else {
+			error.textContent = "Invalid direct-launch URL.";
+			errorCode.textContent = "Only HTTP and HTTPS URLs are supported.";
+		}
+	} catch (err) {
+		error.textContent = "Invalid direct-launch URL.";
+		errorCode.textContent = err.toString();
+	}
+}
