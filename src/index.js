@@ -11,7 +11,7 @@ import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
 const publicPath = fileURLToPath(new URL("../public/", import.meta.url));
 
-// Wisp Configuration: Refer to the documentation at https://www.npmjs.com/package/@mercuryworkshop/wisp-js/server
+// Wisp Configuration: Refer to the documentation at https://www.npmjs.com/package/@mercuryworkshop/wisp-js
 
 logging.set_level(logging.NONE);
 Object.assign(wisp.options, {
@@ -24,19 +24,8 @@ const fastify = Fastify({
 	serverFactory: (handler) => {
 		return createServer()
 			.on("request", (req, res) => {
-				// Scramjet needs cross-origin isolation, but the launcher
-				// also needs to be able to embed this page in an iframe.
 				res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
 				res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-
-				// Explicitly allow this application to be embedded.
-				// The hosting layer must not add a conflicting X-Frame-Options header.
-				res.removeHeader("X-Frame-Options");
-				res.setHeader(
-					"Content-Security-Policy",
-					"frame-ancestors *;"
-				);
-
 				handler(req, res);
 			})
 			.on("upgrade", (req, socket, head) => {
