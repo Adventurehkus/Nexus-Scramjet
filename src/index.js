@@ -58,6 +58,13 @@ fastify.register(fastifyStatic, {
 	decorateReply: false,
 });
 
+fastify.get("/health", async (request, reply) => {
+	reply
+		.header("Access-Control-Allow-Origin", "*")
+		.type("text/plain")
+		.send("OK");
+});
+
 fastify.setNotFoundHandler((res, reply) => {
 	return reply.code(404).type("text/html").sendFile("404.html");
 });
