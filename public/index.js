@@ -40,6 +40,42 @@ scramjet.init();
 
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
 
+// The most recently opened Scramjet browsing frame.
+let activeScramjetFrame = null;
+
+// Accept navigation commands only from the parent window that embeds this app.
+window.addEventListener("message", (event) => {
+	if (event.source !== window.parent) return;
+
+	const message = event.data;
+	if (
+		!message ||
+		message.type !== "NEXUS_BROWSER_NAVIGATE" ||
+		!["back", "forward", "refresh"].includes(message.action)
+	) {
+		return;
+	}
+
+	const browsingWindow = activeScramjetFrame?.frame?.contentWindow;
+	if (!browsingWindow) return;
+
+	try {
+		switch (message.action) {
+			case "back":
+				browsingWindow.history.back();
+				break;
+			case "forward":
+				browsingWindow.history.forward();
+				break;
+			case "refresh":
+				browsingWindow.location.reload();
+				break;
+		}
+	} catch (err) {
+		console.warn("Nexus-Scramjet: Navigation command failed.", err);
+	}
+});
+
 async function launch(url) {
 	try {
 		await registerSW();
@@ -61,6 +97,7 @@ async function launch(url) {
 	}
 
 	const frame = scramjet.createFrame();
+	activeScramjetFrame = frame;
 	frame.frame.id = "sj-frame";
 	document.body.appendChild(frame.frame);
 	frame.go(url);
