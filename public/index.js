@@ -56,19 +56,19 @@ window.addEventListener("message", (event) => {
 		return;
 	}
 
-	const browsingWindow = activeScramjetFrame?.frame?.contentWindow;
-	if (!browsingWindow) return;
+	if (!activeScramjetFrame) return;
 
 	try {
+		// Use Scramjet's Frame API so navigation works with proxied history.
 		switch (message.action) {
 			case "back":
-				browsingWindow.history.back();
+				activeScramjetFrame.back();
 				break;
 			case "forward":
-				browsingWindow.history.forward();
+				activeScramjetFrame.forward();
 				break;
 			case "refresh":
-				browsingWindow.location.reload();
+				activeScramjetFrame.reload();
 				break;
 		}
 	} catch (err) {
