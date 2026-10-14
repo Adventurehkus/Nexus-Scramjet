@@ -1,43 +1,5 @@
 "use strict";
 
-/*
- * Nexus tab identity.
- * Keep the Scramjet wrapper tab title fixed and its favicon blank.
- */
-(() => {
-	const fixedTitle = "Nexus Game Runtime";
-
-	function removeFavicons() {
-		document
-			.querySelectorAll(
-				'link[rel~="icon"], ' +
-				'link[rel="shortcut icon"], ' +
-				'link[rel="mask-icon"], ' +
-				'link[rel="apple-touch-icon"]'
-			)
-			.forEach((link) => link.remove());
-	}
-
-	function enforceIdentity() {
-		if (document.title !== fixedTitle) {
-			document.title = fixedTitle;
-		}
-
-		removeFavicons();
-	}
-
-	enforceIdentity();
-
-	const observer = new MutationObserver(enforceIdentity);
-	observer.observe(document.documentElement, {
-		subtree: true,
-		childList: true,
-		characterData: true,
-		attributes: true,
-		attributeFilter: ["rel"],
-	});
-})();
-
 const params = new URLSearchParams(window.location.search);
 const theme = params.get("theme");
 if (theme === "nexus" || theme === "midnight" || theme === "light") {
