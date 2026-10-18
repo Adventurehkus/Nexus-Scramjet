@@ -11,12 +11,12 @@ import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
 const publicPath = fileURLToPath(new URL("../public/", import.meta.url));
 
-// Wisp Configuration: Refer to the documentation at https://www.npmjs.com/package/@mercuryworkshop/wisp-js
+// Wisp Configuration: Refer to the documentation at https://www.npmjs.com/package/@mercuryworkshop/wisp-js/server
 
 logging.set_level(logging.NONE);
 Object.assign(wisp.options, {
 	allow_udp_streams: false,
-	hostname_blacklist: [/example\.com/],
+	hostname_blacklist: [/example\\.com/],
 	dns_servers: ["1.1.1.3", "1.0.0.3"],
 });
 
@@ -82,6 +82,14 @@ fastify.get("/health", async (request, reply) => {
 		.send("OK");
 });
 
+// Temporary diagnostic endpoint: reports frame headers visible to Fastify before onSend.
+fastify.get("/debug-headers", async (request, reply) => {
+	return {
+		frameOptions: reply.getHeader("x-frame-options") ?? null,
+		contentSecurityPolicy: reply.getHeader("content-security-policy") ?? null,
+	};
+});
+
 fastify.setNotFoundHandler((res, reply) => {
 	return reply.code(404).type("text/html").sendFile("404.html");
 });
@@ -95,9 +103,7 @@ fastify.server.on("listening", () => {
 	console.log(`\thttp://localhost:${address.port}`);
 	console.log(`\thttp://${hostname()}:${address.port}`);
 	console.log(
-		`\thttp://${
-			address.family === "IPv6" ? `[${address.address}]` : address.address
-		}:${address.port}`
+		`\thttp://${address.family === "IPv6" ? `[${address.address}]` : address.address}:${address.port}`
 	);
 });
 
