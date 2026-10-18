@@ -26,6 +26,15 @@ const fastify = Fastify({
 			.on("request", (req, res) => {
 				res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
 				res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+
+				/*
+				 * Allow Nexus Launcher to embed this Scramjet page.
+				 * The hosting layer must not add a conflicting
+				 * X-Frame-Options header or stricter frame-ancestors policy.
+				 */
+				res.removeHeader("X-Frame-Options");
+				res.setHeader("Content-Security-Policy", "frame-ancestors *;");
+
 				handler(req, res);
 			})
 			.on("upgrade", (req, socket, head) => {
