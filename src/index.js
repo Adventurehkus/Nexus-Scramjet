@@ -44,6 +44,14 @@ const fastify = Fastify({
 	},
 });
 
+// Remove frame-blocking headers at Fastify's final response stage as well.
+// This protects the app when middleware adds them after the raw server callback.
+fastify.addHook("onSend", async (request, reply, payload) => {
+	reply.removeHeader("x-frame-options");
+	reply.removeHeader("content-security-policy");
+	return payload;
+});
+
 fastify.register(fastifyStatic, {
 	root: publicPath,
 	decorateReply: true,
