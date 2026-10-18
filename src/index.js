@@ -35,7 +35,7 @@ const fastify = Fastify({
 				 * header or a second, stricter frame-ancestors policy.
 				 */
 				res.removeHeader("X-Frame-Options");
-				res.setHeader("Content-Security-Policy", "frame-ancestors https: http;");
+				res.setHeader("Content-Security-Policy", "frame-ancestors https: http:;");
 
 				handler(req, res);
 			})
