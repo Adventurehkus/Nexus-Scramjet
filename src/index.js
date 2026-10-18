@@ -28,16 +28,11 @@ const fastify = Fastify({
 				res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
 
 				/*
-				 * Allow HTTPS-hosted launchers to embed this Scramjet page.
-				 * Explicit scheme sources avoid browsers treating a bare wildcard
-				 * as insufficient for the ancestor scheme.
-				 * The hosting layer must not add a conflicting X-Frame-Options
-				 * header or a second, stricter frame-ancestors policy.
+				 * Allow Nexus Launcher to embed this Scramjet page.
+				 * Remove app-level frame restrictions; if the hosting platform or
+				 * reverse proxy injects them, they must be changed in that configuration.
 				 */
 				res.removeHeader("X-Frame-Options");
-				// Do not add a frame-ancestors policy here: the launcher may be nested
-				// inside an opaque/sandboxed ancestor that cannot match a scheme source.
-				// Also clear any app-level CSP set before this request handler runs.
 				res.removeHeader("Content-Security-Policy");
 
 				handler(req, res);
