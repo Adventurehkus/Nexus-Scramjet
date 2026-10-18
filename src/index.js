@@ -35,7 +35,10 @@ const fastify = Fastify({
 				 * header or a second, stricter frame-ancestors policy.
 				 */
 				res.removeHeader("X-Frame-Options");
-				res.setHeader("Content-Security-Policy", "frame-ancestors https: http:;");
+				// Do not add a frame-ancestors policy here: the launcher may be nested
+				// inside an opaque/sandboxed ancestor that cannot match a scheme source.
+				// Also clear any app-level CSP set before this request handler runs.
+				res.removeHeader("Content-Security-Policy");
 
 				handler(req, res);
 			})
